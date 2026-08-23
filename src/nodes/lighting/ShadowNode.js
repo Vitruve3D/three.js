@@ -794,9 +794,14 @@ class ShadowNode extends ShadowBaseNode {
 		// do not render shadow maps during precompilation
 
 		if ( frame.renderer._isPreCompiling === true ) return;
+		
+		// the shadow map is null before the first setup(), and again after
+		// _reset(), which dispose() calls when a light stops casting
+
+		if ( this.shadowMap === null ) return;
 
 		const { shadow } = this;
-
+		
 		let needsUpdate = shadow.needsUpdate || shadow.autoUpdate;
 
 		if ( needsUpdate ) {
@@ -804,7 +809,7 @@ class ShadowNode extends ShadowBaseNode {
 			if ( this._cameraFrameId.get( frame.camera ) === frame.frameId ) {
 
 				needsUpdate = false;
-
+				
 			}
 
 			this._cameraFrameId.set( frame.camera, frame.frameId );
