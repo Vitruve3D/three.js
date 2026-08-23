@@ -791,9 +791,14 @@ class ShadowNode extends ShadowBaseNode {
 	 */
 	updateBefore( frame ) {
 
-		// do not render shadow maps during precompilation
+// do not render shadow maps during precompilation
 
 		if ( frame.renderer._isPreCompiling === true ) return;
+		
+		// the shadow map is null before the first setup(), and again after
+		// _reset(), which dispose() calls when a light stops casting
+
+		if ( this.shadowMap === null ) return;
 
 		const { shadow } = this;
 
